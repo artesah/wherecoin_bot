@@ -1,0 +1,27 @@
+{
+  "messages": {
+    "start": "messages__start",
+    "help": "messages__help",
+    "about": "messages__about",
+    "new_operation": "messages__new_operation(type={type};amount={amount})",
+    "operation_finalized": "messages__operation_finalized",
+    "operation_canceled": "messages__operation_canceled"
+  },
+  "exceptions": {
+    "service_exception": "exceptions__service_exception",
+    "invalid_native": "exceptions__invalid_native",
+    "operation_not_found": "exceptions__operation_not_found",
+    "operation_type_already_set": "exceptions__operation_type_already_set",
+    "operation_category_already_set": "exceptions__operation_category_already_set"
+  },
+  "keyboards": {
+    "inline": {
+      "close": "keyboards__inline__close",
+      "operation_type_expenses": "keyboards__inline__operation_type_expenses",
+      "operation_type_income": "keyboards__inline__operation_type_income",
+      "operation_cancel": "keyboards__operation_cancel"
+    },
+    "default": {
+    }
+  }
+}
