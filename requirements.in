@@ -6,3 +6,5 @@ yoyo-migrations==8.2.0
 peewee==3.16.0
 redis==4.5.1
 aiogram==2.25.1
+gspread==5.10.0
+
