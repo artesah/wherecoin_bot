@@ -2,6 +2,7 @@ CREATE TABLE users
 (
     id         INTEGER                     NOT NULL UNIQUE PRIMARY KEY,
     is_blocked BOOLEAN                     NOT NULL DEFAULT FALSE,
+    sheet      VARCHAR(255)                NOT NULL UNIQUE,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE NULL
 );

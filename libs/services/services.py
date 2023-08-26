@@ -65,7 +65,7 @@ class OperationService(Service):
     obj_class = Operation
 
     @classmethod
-    def create_from_native(cls, native: str, user: User) -> Operation:
+    def create_from_native(cls, native: str, **kwargs) -> Operation:
         if not re.match(NATIVE_REGEX, native):
             raise InvalidNativeError
 
@@ -82,9 +82,9 @@ class OperationService(Service):
         amount = abs(float(native))
 
         return Operation.create(
-            user_id=user.id,
             amount=amount,
-            type=type_
+            type=type_,
+            **kwargs
         )
 
     def set_type(self, type_: OperationTypes) -> None:

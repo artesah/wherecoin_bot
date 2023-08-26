@@ -78,6 +78,7 @@ class User(BaseModel):
         table_name = "users"
 
     is_blocked = BooleanField(default=False)
+    sheet = CharField(null=True, unique=True)
 
 
 class Chat(BaseModel):

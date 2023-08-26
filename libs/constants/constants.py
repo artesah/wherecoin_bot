@@ -14,9 +14,10 @@ class OperationStatuses(enum.IntEnum):
     Interaction = 1
     Finalized = 2
     Processing = 3
-    Done = 4
+    Uploaded = 4
     Canceled = 5
     Expired = 6
+    Error = 7
 
 
 class OperationTypes(enum.IntEnum):

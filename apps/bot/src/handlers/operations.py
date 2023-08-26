@@ -5,7 +5,7 @@ from apps.bot.loader import dp, content
 from apps.bot.src.filters import UserFilter
 from apps.bot.src.keyboards.inline import operation_set_type_keyboard, operation_set_category_keyboard, \
     operation_set_type_callback, operation_set_category_callback, operation_cancel_callback
-from libs.constants import NATIVE_REGEX, OperationTypes
+from libs.constants import NATIVE_REGEX, OperationTypes, OperationStatuses
 from libs.exceptions.exceptions import InvalidNativeError, OperationTypeAlreadySetError, \
     OperationCategoryAlreadySetError, ServiceException
 from libs.models import Operation, OperationCategory, User
@@ -14,7 +14,8 @@ from libs.models import Operation, OperationCategory, User
 @dp.message_handler(Regexp(NATIVE_REGEX), UserFilter())
 async def process_native(message: Message, current_user: User):
     try:
-        operation = Operation.ServiceClass.create_from_native(message.text, current_user)
+        operation = Operation.ServiceClass.create_from_native(message.text, user_id=current_user.id,
+                                                              status=OperationStatuses.Interaction)
     except InvalidNativeError:
         await message.answer(content["exceptions"]["invalid_native"])
         return
@@ -31,6 +32,8 @@ async def process_native(message: Message, current_user: User):
                                                                current_user.Service.get_active_operation_categories(
                                                                    operation.type))
         )
+
+    await message.delete()
 
 
 @dp.callback_query_handler(operation_set_type_callback.filter(), UserFilter())
