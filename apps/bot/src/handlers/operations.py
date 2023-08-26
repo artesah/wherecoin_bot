@@ -8,7 +8,7 @@ from apps.bot.src.keyboards.inline import operation_set_type_keyboard, operation
 from libs.constants import NATIVE_REGEX, OperationTypes
 from libs.exceptions.exceptions import InvalidNativeError, OperationTypeAlreadySetError, \
     OperationCategoryAlreadySetError, ServiceException
-from libs.models import Operation, User, Category
+from libs.models import Operation, OperationCategory, User
 
 
 @dp.message_handler(Regexp(NATIVE_REGEX), UserFilter())
@@ -28,7 +28,8 @@ async def process_native(message: Message, current_user: User):
         await message.answer(
             text=content["messages"]["new_operation"].format(type=operation.type, amount=operation.amount),
             reply_markup=await operation_set_category_keyboard(operation.id,
-                                                               current_user.Service.get_active_categories())
+                                                               current_user.Service.get_active_operation_categories(
+                                                                   operation.type))
         )
 
 
@@ -55,7 +56,7 @@ async def process_set_operation_type(call: CallbackQuery, callback_data: dict, c
 
     await call.message.edit_reply_markup(
         await operation_set_category_keyboard(operation.id,
-                                              current_user.Service.get_active_categories())
+                                              current_user.Service.get_active_operation_categories(operation.type))
     )
 
 
@@ -70,7 +71,7 @@ async def process_set_operation_category(call: CallbackQuery, callback_data: dic
         await call.message.delete()
         return
 
-    category = Category.get_by_id(category_id)
+    category = OperationCategory.get_by_id(category_id)
     if category is None:
         await call.answer(content["exceptions"]["category_not_found"], show_alert=True)
         await call.message.delete()

@@ -1,4 +1,4 @@
 DROP TABLE operations;
-DROP TABLE categories;
+DROP TABLE operation_categories;
 DROP TABLE chats;
 DROP TABLE users;

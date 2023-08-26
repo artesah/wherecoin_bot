@@ -2,7 +2,7 @@ __all__ = [
     "database",
     "BaseModel",
     "User",
-    "Category",
+    "OperationCategory",
     "Operation",
     "Chat",
     "set_base_model_mixin",
@@ -89,12 +89,13 @@ class Chat(BaseModel):
     data = BinaryJSONField()
 
 
-class Category(BaseModel):
+class OperationCategory(BaseModel):
     class Meta:
-        table_name = "categories"
+        table_name = "operation_categories"
 
     user = ForeignKeyField(User, backref="categories_query")
     name = CharField()
+    operation_type = SmallIntegerField()
     is_active = BooleanField(default=True)
 
 
@@ -103,7 +104,7 @@ class Operation(BaseModel):
         table_name = "operations"
 
     user = ForeignKeyField(User, backref="operations_query")
-    category = ForeignKeyField(Category, backref="operations_query", null=True)
+    category = ForeignKeyField(OperationCategory, backref="operations_query", null=True)
     status = SmallIntegerField(default=OperationStatuses.Created)
     type = SmallIntegerField(null=True)
     amount = DoubleField(null=True)

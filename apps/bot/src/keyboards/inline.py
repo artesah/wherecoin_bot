@@ -6,7 +6,7 @@ from aiogram.utils.callback_data import CallbackData
 from apps.bot.config import CONTENT_FILENAME
 from apps.bot.src.content import load_content
 from libs.constants import OperationTypes
-from libs.models import Category
+from libs.models import OperationCategory
 
 _content = load_content(CONTENT_FILENAME)
 
@@ -54,7 +54,7 @@ async def operation_set_type_keyboard(operation_id: int):
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
 
-async def operation_set_category_keyboard(operation_id: int, categories: List[Category]):
+async def operation_set_category_keyboard(operation_id: int, categories: List[OperationCategory]):
     inline_keyboard = []
 
     row = []
@@ -74,19 +74,6 @@ async def operation_set_category_keyboard(operation_id: int, categories: List[Ca
         )
     else:
         inline_keyboard.append(row)
-
-    # for category in categories:
-    #     inline_keyboard.append(
-    #         [
-    #             InlineKeyboardButton(
-    #                 text=category.name,
-    #                 callback_data=operation_set_category_callback.new(
-    #                     operation_id=str(operation_id),
-    #                     category_id=str(category.id)
-    #                 ),
-    #             ),
-    #         ]
-    #     )
 
     inline_keyboard.append([
         InlineKeyboardButton(

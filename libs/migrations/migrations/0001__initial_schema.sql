@@ -27,27 +27,28 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 ALTER TABLE ONLY users
     ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
-CREATE TABLE categories
+CREATE TABLE operation_categories
 (
-    id         INTEGER                     NOT NULL UNIQUE PRIMARY KEY,
-    user_id    INTEGER                     NOT NULL,
-    name       VARCHAR(255)                NOT NULL,
-    is_active  BOOLEAN                     NOT NULL DEFAULT TRUE,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITHOUT TIME ZONE NULL,
+    id             INTEGER                     NOT NULL UNIQUE PRIMARY KEY,
+    user_id        INTEGER                     NOT NULL,
+    name           VARCHAR(255)                NOT NULL,
+    is_active      BOOLEAN                     NOT NULL DEFAULT TRUE,
+    operation_type SMALLINT                    NOT NULL,
+    created_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at     TIMESTAMP WITHOUT TIME ZONE NULL,
 
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
-CREATE SEQUENCE categories_id_seq
+CREATE SEQUENCE operation_categories_id_seq
     AS INTEGER
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER SEQUENCE categories_id_seq OWNED BY categories.id;
-ALTER TABLE ONLY categories
-    ALTER COLUMN id SET DEFAULT nextval('categories_id_seq'::regclass);
+ALTER SEQUENCE operation_categories_id_seq OWNED BY operation_categories.id;
+ALTER TABLE ONLY operation_categories
+    ALTER COLUMN id SET DEFAULT nextval('operation_categories_id_seq'::regclass);
 
 CREATE TABLE operations
 (
@@ -62,7 +63,7 @@ CREATE TABLE operations
     updated_at  TIMESTAMP WITHOUT TIME ZONE NULL,
 
     FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (category_id) REFERENCES categories (id)
+    FOREIGN KEY (category_id) REFERENCES operation_categories (id)
 );
 CREATE SEQUENCE operations_id_seq
     AS INTEGER

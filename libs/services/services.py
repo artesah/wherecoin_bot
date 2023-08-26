@@ -12,7 +12,7 @@ from libs.constants import NATIVE_REGEX, OperationTypes, OperationStatuses
 from libs.exceptions.exceptions import InvalidNativeError, ServiceException, OperationTypeAlreadySetError, \
     OperationCategoryAlreadySetError
 from libs.models import *
-from libs.models.models import User, Operation
+from libs.models.models import User, Operation, OperationCategory
 from libs.services.base import Service
 from libs.services.utils import ServicesMixin
 
@@ -28,9 +28,13 @@ class UserService(Service):
     def get_by_chat_id(cls, chat_id: int):
         return User.select().join(Chat).where(Chat.id == str(chat_id)).first()
 
-    def get_active_categories(self) -> List[Category]:
+    def get_active_operation_categories(self, operation_type: OperationTypes) -> List[OperationCategory]:
         return list(
-            Category.select().where(Category.user_id == self.obj.id, Category.is_active)
+            OperationCategory.select().where(
+                OperationCategory.user_id == self.obj.id,
+                OperationCategory.operation_type == operation_type,
+                OperationCategory.is_active
+            )
         )
 
 
