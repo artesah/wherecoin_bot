@@ -5,7 +5,7 @@ from libs.models import database
 
 
 def _init_database(celery):
-    database.initialize(PooledPostgresqlExtDatabase(**celery.conf['postgres_config']))
+    database.initialize(PooledPostgresqlExtDatabase(**celery.conf["postgres_config"]))
 
 
 def create_app(config):

@@ -11,8 +11,12 @@ from libs.models import OperationCategory
 _content = load_content(CONTENT_FILENAME)
 
 close_callback = CallbackData("close")
-operation_set_type_callback = CallbackData("operation_set_type", "operation_id", "operation_type")
-operation_set_category_callback = CallbackData("operation_set_category", "operation_id", "category_id")
+operation_set_type_callback = CallbackData(
+    "operation_set_type", "operation_id", "operation_type"
+)
+operation_set_category_callback = CallbackData(
+    "operation_set_category", "operation_id", "category_id"
+)
 operation_cancel_callback = CallbackData("operation_cancel", "operation_id")
 
 _close_button = [
@@ -30,14 +34,14 @@ async def operation_set_type_keyboard(operation_id: int):
                 text=_content["keyboards"]["inline"]["operation_type_income"],
                 callback_data=operation_set_type_callback.new(
                     operation_id=str(operation_id),
-                    operation_type=str(OperationTypes.Income.value)
+                    operation_type=str(OperationTypes.Income.value),
                 ),
             ),
             InlineKeyboardButton(
                 text=_content["keyboards"]["inline"]["operation_type_expenses"],
                 callback_data=operation_set_type_callback.new(
                     operation_id=str(operation_id),
-                    operation_type=str(OperationTypes.Expenses.value)
+                    operation_type=str(OperationTypes.Expenses.value),
                 ),
             ),
         ],
@@ -48,13 +52,15 @@ async def operation_set_type_keyboard(operation_id: int):
                     operation_id=str(operation_id)
                 ),
             ),
-        ]
+        ],
     ]
 
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
 
-async def operation_set_category_keyboard(operation_id: int, categories: List[OperationCategory]):
+async def operation_set_category_keyboard(
+    operation_id: int, categories: List[OperationCategory]
+):
     inline_keyboard = []
 
     row = []
@@ -67,21 +73,22 @@ async def operation_set_category_keyboard(operation_id: int, categories: List[Op
             InlineKeyboardButton(
                 text=cat.name,
                 callback_data=operation_set_category_callback.new(
-                    operation_id=str(operation_id),
-                    category_id=str(cat.id)
+                    operation_id=str(operation_id), category_id=str(cat.id)
                 ),
             ),
         )
     else:
         inline_keyboard.append(row)
 
-    inline_keyboard.append([
-        InlineKeyboardButton(
-            text=_content["keyboards"]["inline"]["operation_cancel"],
-            callback_data=operation_cancel_callback.new(
-                operation_id=str(operation_id)
+    inline_keyboard.append(
+        [
+            InlineKeyboardButton(
+                text=_content["keyboards"]["inline"]["operation_cancel"],
+                callback_data=operation_cancel_callback.new(
+                    operation_id=str(operation_id)
+                ),
             ),
-        ),
-    ])
+        ]
+    )
 
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)

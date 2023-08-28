@@ -1,7 +1,4 @@
-from aiogram.dispatcher.filters import (
-    CommandStart,
-    ChatTypeFilter
-)
+from aiogram.dispatcher.filters import CommandStart, ChatTypeFilter
 from aiogram.types import (
     Message,
     ChatType,
@@ -17,7 +14,7 @@ async def process_start(message: Message):
     chat = Chat.ServiceClass.create_if_not_exists(
         tg_chat_id=message.from_user.id,
         tg_chat_data=message.from_user.as_json(),
-        block=BLOCK_REGISTRATION
+        block=BLOCK_REGISTRATION,
     )
 
     if chat.user.is_blocked:

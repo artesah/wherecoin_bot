@@ -16,8 +16,9 @@ from peewee import (
     SmallIntegerField,
     DoubleField,
     DateTimeField,
-    ForeignKeyField, TextField, BooleanField,
-
+    ForeignKeyField,
+    TextField,
+    BooleanField,
 )
 from playhouse.postgres_ext import BinaryJSONField
 

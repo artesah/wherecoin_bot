@@ -27,7 +27,7 @@ class SheetsClient:
     def _create_page_from_template(self, title):
         template = self.sheet.worksheet(self._template_title)
         new_worksheet_data = template.copy_to(self.sheet.id)
-        worksheet = self.sheet.get_worksheet_by_id(new_worksheet_data['sheetId'])
+        worksheet = self.sheet.get_worksheet_by_id(new_worksheet_data["sheetId"])
         worksheet.update_title(title)
         return worksheet
 
@@ -59,18 +59,28 @@ class SheetsClient:
             current_page,
             self._expenses_column,
             [
-                [str(o.category.name), o.amount, str(o.created_at.strftime(self._date_format)), o.comment or ""]
-                for o
-                in operations if o.type == OperationTypes.Expenses
-            ]
+                [
+                    str(o.category.name),
+                    o.amount,
+                    str(o.created_at.strftime(self._date_format)),
+                    o.comment or "",
+                ]
+                for o in operations
+                if o.type == OperationTypes.Expenses
+            ],
         )
 
         self._upload_operations(
             current_page,
             self._income_column,
             [
-                [str(o.category.name), o.amount, str(o.created_at.strftime(self._date_format)), o.comment or ""]
-                for o
-                in operations if o.type == OperationTypes.Income
-            ]
+                [
+                    str(o.category.name),
+                    o.amount,
+                    str(o.created_at.strftime(self._date_format)),
+                    o.comment or "",
+                ]
+                for o in operations
+                if o.type == OperationTypes.Income
+            ],
         )

@@ -14,9 +14,9 @@ logger = get_task_logger(__name__)
 
 def _format_obj(obj):
     return dict(
-        amount=abs(obj['amount'] / 100),
-        type=OperationTypes.Expenses if obj['amount'] < 0 else OperationTypes.Income,
-        comment=obj.get('description')
+        amount=abs(obj["amount"] / 100),
+        type=OperationTypes.Expenses if obj["amount"] < 0 else OperationTypes.Income,
+        comment=obj.get("description"),
     )
 
 
@@ -27,8 +27,7 @@ def download_statement(integration_id: int, sampling_time: int):
 
     try:
         resp = client.statement(
-            start=(get_now() - timedelta(seconds=sampling_time)),
-            to=get_now()
+            start=(get_now() - timedelta(seconds=sampling_time)), to=get_now()
         )
     except MonobankError as ex:
         logger.error(ex)
@@ -42,10 +41,9 @@ def download_statement(integration_id: int, sampling_time: int):
         rows.append(_format_obj(obj))
 
     for i, obj in enumerate(rows):
-        rows[i].update(dict(
-            user_id=integration.user_id,
-            source=OperationSources.Monobank
-        ))
+        rows[i].update(
+            dict(user_id=integration.user_id, source=OperationSources.Monobank)
+        )
 
     Operation.insert_many(rows).execute()
 
@@ -53,8 +51,10 @@ def download_statement(integration_id: int, sampling_time: int):
 @celery.task
 def init_statements(sampling_time: int):
     integrations = list(
-        MonobankIntegration.select(MonobankIntegration.id, MonobankIntegration.user_id).join(User).where(
-            User.is_blocked == False))
+        MonobankIntegration.select(MonobankIntegration.id, MonobankIntegration.user_id)
+        .join(User)
+        .where(User.is_blocked == False)
+    )
 
     jobs = (download_statement.si(i.id, sampling_time) for i in integrations)
 

@@ -9,8 +9,12 @@ import re
 from typing import List
 
 from libs.constants import NATIVE_REGEX, OperationTypes, OperationStatuses
-from libs.exceptions.exceptions import InvalidNativeError, ServiceException, OperationTypeAlreadySetError, \
-    OperationCategoryAlreadySetError
+from libs.exceptions.exceptions import (
+    InvalidNativeError,
+    ServiceException,
+    OperationTypeAlreadySetError,
+    OperationCategoryAlreadySetError,
+)
 from libs.models import *
 from libs.models.models import User, Operation, OperationCategory
 from libs.services.base import Service
@@ -28,12 +32,14 @@ class UserService(Service):
     def get_by_chat_id(cls, chat_id: int):
         return User.select().join(Chat).where(Chat.id == str(chat_id)).first()
 
-    def get_active_operation_categories(self, operation_type: OperationTypes) -> List[OperationCategory]:
+    def get_active_operation_categories(
+        self, operation_type: OperationTypes
+    ) -> List[OperationCategory]:
         return list(
             OperationCategory.select().where(
                 OperationCategory.user_id == self.obj.id,
                 OperationCategory.operation_type == operation_type,
-                OperationCategory.is_active
+                OperationCategory.is_active,
             )
         )
 
@@ -42,7 +48,9 @@ class ChatService(Service):
     obj_class = Chat
 
     @classmethod
-    def create_if_not_exists(cls, tg_chat_id: int, tg_chat_data: dict, block: bool = False) -> Chat:
+    def create_if_not_exists(
+        cls, tg_chat_id: int, tg_chat_data: dict, block: bool = False
+    ) -> Chat:
         chat = Chat.get_by_id(str(tg_chat_id))
         if chat is not None:
             if chat.data != tg_chat_data:
@@ -55,7 +63,7 @@ class ChatService(Service):
             chat = Chat.create(
                 id=str(tg_chat_id),
                 data=tg_chat_data,
-                user=User.ServiceClass.create_for_chat(is_blocked=block)
+                user=User.ServiceClass.create_for_chat(is_blocked=block),
             )
 
         return chat
@@ -81,11 +89,7 @@ class OperationService(Service):
 
         amount = abs(float(native))
 
-        return Operation.create(
-            amount=amount,
-            type=type_,
-            **kwargs
-        )
+        return Operation.create(amount=amount, type=type_, **kwargs)
 
     def set_type(self, type_: OperationTypes) -> None:
         if self.obj.type is not None:
@@ -102,12 +106,12 @@ class OperationService(Service):
     @property
     def is_able_to_finalize(self) -> bool:
         if all(
-                [
-                    self.obj.category_id is not None,
-                    self.obj.amount is not None,
-                    self.obj.type is not None,
-                    self.obj.status < OperationStatuses.Finalized
-                ]
+            [
+                self.obj.category_id is not None,
+                self.obj.amount is not None,
+                self.obj.type is not None,
+                self.obj.status < OperationStatuses.Finalized,
+            ]
         ):
             return True
         return False

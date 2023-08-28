@@ -1,9 +1,4 @@
-__all__ = [
-    "NATIVE_REGEX",
-    "OperationStatuses",
-    "OperationTypes",
-    "OperationSources"
-]
+__all__ = ["NATIVE_REGEX", "OperationStatuses", "OperationTypes", "OperationSources"]
 
 import enum
 

@@ -6,7 +6,10 @@ from aiogram.utils.exceptions import TelegramAPIError
 
 from apps.bot.config import BOT_ADMINS, CONTENT_FILENAME
 from apps.bot.src.content import load_content
-from apps.bot.src.keyboards.inline import operation_set_type_keyboard, operation_set_category_keyboard
+from apps.bot.src.keyboards.inline import (
+    operation_set_type_keyboard,
+    operation_set_category_keyboard,
+)
 from libs.models import Operation
 
 _content = load_content(CONTENT_FILENAME)

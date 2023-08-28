@@ -21,7 +21,7 @@ class MonobankClient:
             method=method,
             url=self._make_url(uri),
             headers={"X-Token": self._token},
-            **kwargs
+            **kwargs,
         )
 
         return self._handle_response(response)
@@ -46,4 +46,7 @@ class MonobankClient:
         return self._request("GET", "/personal/client-info")
 
     def statement(self, start: datetime, to: datetime):
-        return self._request("GET", f"/personal/statement/0/{int(start.timestamp())}/{int(to.timestamp())}")
+        return self._request(
+            "GET",
+            f"/personal/statement/0/{int(start.timestamp())}/{int(to.timestamp())}",
+        )
