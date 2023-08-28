@@ -1,7 +1,8 @@
 __all__ = [
     "NATIVE_REGEX",
     "OperationStatuses",
-    "OperationTypes"
+    "OperationTypes",
+    "OperationSources"
 ]
 
 import enum
@@ -23,3 +24,8 @@ class OperationStatuses(enum.IntEnum):
 class OperationTypes(enum.IntEnum):
     Expenses = 0
     Income = 1
+
+
+class OperationSources(enum.IntEnum):
+    Manual = 0
+    Monobank = 1

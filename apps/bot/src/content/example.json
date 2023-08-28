@@ -4,7 +4,7 @@
     "help": "messages__help",
     "about": "messages__about",
     "test": "messages__test",
-    "new_operation": "messages__new_operation(type={type};amount={amount})",
+    "new_operation": "messages__new_operation(type={type};source={source};amount={amount};comment={comment})",
     "operation_finalized": "messages__operation_finalized",
     "operation_canceled": "messages__operation_canceled"
   },

@@ -6,6 +6,7 @@ from apps.bot.src.filters import UserFilter
 from apps.bot.src.keyboards.inline import operation_set_type_keyboard, operation_set_category_keyboard, \
     operation_set_type_callback, operation_set_category_callback, operation_cancel_callback
 from libs.constants import NATIVE_REGEX, OperationTypes, OperationStatuses
+from libs.constants.constants import OperationSources
 from libs.exceptions.exceptions import InvalidNativeError, OperationTypeAlreadySetError, \
     OperationCategoryAlreadySetError, ServiceException
 from libs.models import Operation, OperationCategory, User
@@ -15,25 +16,28 @@ from libs.models import Operation, OperationCategory, User
 async def process_native(message: Message, current_user: User):
     try:
         operation = Operation.ServiceClass.create_from_native(message.text, user_id=current_user.id,
-                                                              status=OperationStatuses.Interaction)
+                                                              status=OperationStatuses.Interaction,
+                                                              source=OperationSources.Manual)
     except InvalidNativeError:
         await message.answer(content["exceptions"]["invalid_native"])
         return
 
     if operation.type is None:
         await message.answer(
-            text=content["messages"]["new_operation"].format(type=operation.type, amount=operation.amount),
+            text=content["messages"]["new_operation"].format(type=operation.type, source=operation.source,
+                                                             amount=operation.amount, comment=operation.comment),
             reply_markup=await operation_set_type_keyboard(operation.id)
         )
     else:
         await message.answer(
-            text=content["messages"]["new_operation"].format(type=operation.type, amount=operation.amount),
+            text=content["messages"]["new_operation"].format(type=operation.type, source=operation.source,
+                                                             amount=operation.amount, comment=operation.comment),
             reply_markup=await operation_set_category_keyboard(operation.id,
                                                                current_user.Service.get_active_operation_categories(
                                                                    operation.type))
         )
 
-    await message.delete()
+        await message.delete()
 
 
 @dp.callback_query_handler(operation_set_type_callback.filter(), UserFilter())
@@ -57,6 +61,7 @@ async def process_set_operation_type(call: CallbackQuery, callback_data: dict, c
         await call.message.delete()
         return
 
+    await call.answer(cache_time=1)
     await call.message.edit_reply_markup(
         await operation_set_category_keyboard(operation.id,
                                               current_user.Service.get_active_operation_categories(operation.type))

@@ -1,7 +1,7 @@
 from celery.utils.log import get_task_logger
 from gspread.exceptions import APIError
 
-from apps.scheduler.main import celery
+from apps.worker.main import celery
 import celery as celery_lib
 from libs.constants import OperationStatuses
 from libs.models import database, Operation, User
@@ -41,7 +41,7 @@ def upload_user_operations(user_id: int):
 
 
 @celery.task
-def init_uploading():
+def init_operation_uploading():
     users = list(User.select(User.id).where(User.is_blocked == False, User.sheet.is_null(False)))
 
     jobs = (upload_user_operations.si(u.id) for u in users)

@@ -162,5 +162,5 @@ cython_debug/
 playground/
 playground.py
 
-apps/scheduler/celeryconfig.py
+apps/worker/celeryconfig.py
 celerybeat-schedule.db

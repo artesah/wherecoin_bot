@@ -5,6 +5,7 @@ __all__ = [
     "OperationCategory",
     "Operation",
     "Chat",
+    "MonobankIntegration",
     "set_base_model_mixin",
 ]
 
@@ -108,8 +109,17 @@ class Operation(BaseModel):
     category = ForeignKeyField(OperationCategory, backref="operations_query", null=True)
     status = SmallIntegerField(default=OperationStatuses.Created)
     type = SmallIntegerField(null=True)
+    source = SmallIntegerField()
     amount = DoubleField(null=True)
     comment = TextField(null=True)
+
+
+class MonobankIntegration(BaseModel):
+    class Meta:
+        table_name = "monobank_integrations"
+
+    user = ForeignKeyField(User, backref="monobank_integrations_query")
+    token = CharField()
 
 
 def set_base_model_mixin(mixin):

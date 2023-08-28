@@ -7,6 +7,8 @@ with env.prefixed("BOT_APP_"):
     LOG_CONFIG = env.json("LOG_CONFIG")
     CONTENT_FILENAME = env.str("CONTENT_FILENAME")
 
+    SCHEDULER_CONFIG = env.json("SCHEDULER_CONFIG")
+
     with env.prefixed("POSTGRES_"):
         POSTGRES_CONFIG = dict(
             host=env.str("HOST", "localhost"),

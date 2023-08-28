@@ -58,6 +58,7 @@ CREATE TABLE operations
     category_id INTEGER                     NULL,
     status      SMALLINT                    NOT NULL DEFAULT 0,
     type        SMALLINT                    NULL,
+    source      SMALLINT                    NOT NULL,
     amount      DOUBLE PRECISION            NOT NULL,
     comment     TEXT                        NULL,
     created_at  TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -78,3 +79,23 @@ ALTER TABLE ONLY operations
     ALTER COLUMN id SET DEFAULT nextval('operations_id_seq'::regclass);
 
 
+CREATE TABLE monobank_integrations
+(
+    id         INTEGER                     NOT NULL UNIQUE PRIMARY KEY,
+    user_id    INTEGER                     NOT NULL,
+    token      VARCHAR(255)                NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NULL,
+
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+CREATE SEQUENCE monobank_integrations_id_seq
+    AS INTEGER
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE monobank_integrations_id_seq OWNED BY monobank_integrations.id;
+ALTER TABLE ONLY monobank_integrations
+    ALTER COLUMN id SET DEFAULT nextval('monobank_integrations_id_seq'::regclass);
