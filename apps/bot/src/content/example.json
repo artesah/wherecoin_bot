@@ -8,6 +8,16 @@
     "operation_finalized": "messages__operation_finalized",
     "operation_canceled": "messages__operation_canceled"
   },
+  "constants": {
+    "OperationTypes": {
+      "Expenses": "constantsOperationTypesExpenses",
+      "Income": "constantsOperationTypesIncome"
+    },
+    "OperationSources": {
+      "Manual": "constantsOperationSourcesManual",
+      "Monobank": "constantsOperationSourcesMonobank"
+    }
+  },
   "exceptions": {
     "service_exception": "exceptions__service_exception",
     "invalid_native": "exceptions__invalid_native",

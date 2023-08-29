@@ -4,12 +4,12 @@ from aiogram.types import Message, CallbackQuery
 from apps.bot.loader import dp, content
 from apps.bot.src.filters import UserFilter
 from apps.bot.src.keyboards.inline import (
-    operation_set_type_keyboard,
     operation_set_category_keyboard,
     operation_set_type_callback,
     operation_set_category_callback,
     operation_cancel_callback,
 )
+from apps.bot.src.utils.operation import send_operation_message
 from libs.constants import NATIVE_REGEX, OperationTypes, OperationStatuses
 from libs.constants.constants import OperationSources
 from libs.exceptions.exceptions import (
@@ -34,31 +34,8 @@ async def process_native(message: Message, current_user: User):
         await message.answer(content["exceptions"]["invalid_native"])
         return
 
-    if operation.type is None:
-        await message.answer(
-            text=content["messages"]["new_operation"].format(
-                type=operation.type,
-                source=operation.source,
-                amount=operation.amount,
-                comment=operation.comment,
-            ),
-            reply_markup=await operation_set_type_keyboard(operation.id),
-        )
-    else:
-        await message.answer(
-            text=content["messages"]["new_operation"].format(
-                type=operation.type,
-                source=operation.source,
-                amount=operation.amount,
-                comment=operation.comment,
-            ),
-            reply_markup=await operation_set_category_keyboard(
-                operation.id,
-                current_user.Service.get_active_operation_categories(operation.type),
-            ),
-        )
-
-        await message.delete()
+    await send_operation_message(dp.bot, operation)
+    await message.delete()
 
 
 @dp.callback_query_handler(operation_set_type_callback.filter(), UserFilter())
