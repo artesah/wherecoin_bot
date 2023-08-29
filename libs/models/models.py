@@ -22,7 +22,7 @@ from peewee import (
 )
 from playhouse.postgres_ext import BinaryJSONField
 
-from libs.constants.constants import OperationStatuses
+from libs.constants.constants import OperationStatuses, OperationTypes
 from libs.utils import get_now
 
 database = DatabaseProxy()
@@ -109,7 +109,7 @@ class Operation(BaseModel):
     user = ForeignKeyField(User, backref="operations_query")
     category = ForeignKeyField(OperationCategory, backref="operations_query", null=True)
     status = SmallIntegerField(default=OperationStatuses.Created)
-    type = SmallIntegerField(null=True)
+    type = SmallIntegerField(default=OperationTypes.Unset)
     source = SmallIntegerField()
     amount = DoubleField(null=True)
     comment = TextField(null=True)

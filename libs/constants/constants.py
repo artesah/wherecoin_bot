@@ -17,8 +17,9 @@ class OperationStatuses(enum.IntEnum):
 
 
 class OperationTypes(enum.IntEnum):
-    Expenses = 0
-    Income = 1
+    Unset = 0
+    Expenses = 1
+    Income = 2
 
 
 class OperationSources(enum.IntEnum):

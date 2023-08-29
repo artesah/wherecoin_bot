@@ -2,7 +2,7 @@ CREATE TABLE users
 (
     id         INTEGER                     NOT NULL UNIQUE PRIMARY KEY,
     is_blocked BOOLEAN                     NOT NULL DEFAULT FALSE,
-    sheet      VARCHAR(255)                NOT NULL UNIQUE,
+    sheet      VARCHAR(255)                NULL UNIQUE,
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITHOUT TIME ZONE NULL
 );
@@ -57,7 +57,7 @@ CREATE TABLE operations
     user_id     INTEGER                     NOT NULL,
     category_id INTEGER                     NULL,
     status      SMALLINT                    NOT NULL DEFAULT 0,
-    type        SMALLINT                    NULL,
+    type        SMALLINT                    NOT NULL DEFAULT 0,
     source      SMALLINT                    NOT NULL,
     amount      DOUBLE PRECISION            NOT NULL,
     comment     TEXT                        NULL,

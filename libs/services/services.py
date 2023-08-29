@@ -85,14 +85,14 @@ class OperationService(Service):
         elif native[0] == "-":
             type_ = OperationTypes.Expenses
         else:
-            type_ = None
+            type_ = OperationTypes.Unset
 
         amount = abs(float(native))
 
         return Operation.create(amount=amount, type=type_, **kwargs)
 
     def set_type(self, type_: OperationTypes) -> None:
-        if self.obj.type is not None:
+        if self.obj.type != OperationTypes.Unset:
             raise OperationTypeAlreadySetError
 
         self.obj.set(type=type_)

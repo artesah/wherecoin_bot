@@ -40,7 +40,7 @@ async def process_native(message: Message, current_user: User):
 
 @dp.callback_query_handler(operation_set_type_callback.filter(), UserFilter())
 async def process_set_operation_type(
-    call: CallbackQuery, callback_data: dict, current_user: User
+        call: CallbackQuery, callback_data: dict, current_user: User
 ):
     operation_id = int(callback_data.get("operation_id"))
     operation_type = OperationTypes(int(callback_data.get("operation_type")))
@@ -64,6 +64,19 @@ async def process_set_operation_type(
         return
 
     await call.answer(cache_time=1)
+
+    await call.message.edit_text(
+        content["messages"]["new_operation"].format(
+            type=content["constants"]["OperationTypes"][
+                OperationTypes(operation.type).name
+            ],
+            source=content["constants"]["OperationSources"][
+                       OperationSources(operation.source).name
+                   ]
+                   or "",
+            amount=operation.amount,
+            comment=operation.comment or "",
+        ))
     await call.message.edit_reply_markup(
         await operation_set_category_keyboard(
             operation.id,
@@ -74,7 +87,7 @@ async def process_set_operation_type(
 
 @dp.callback_query_handler(operation_set_category_callback.filter(), UserFilter())
 async def process_set_operation_category(
-    call: CallbackQuery, callback_data: dict, current_user: User
+        call: CallbackQuery, callback_data: dict, current_user: User
 ):
     operation_id = int(callback_data.get("operation_id"))
     category_id = int(callback_data.get("category_id"))
@@ -117,7 +130,7 @@ async def process_set_operation_category(
 
 @dp.callback_query_handler(operation_cancel_callback.filter(), UserFilter())
 async def process_operation_cancel(
-    call: CallbackQuery, callback_data: dict, current_user: User
+        call: CallbackQuery, callback_data: dict, current_user: User
 ):
     operation_id = int(callback_data.get("operation_id"))
 

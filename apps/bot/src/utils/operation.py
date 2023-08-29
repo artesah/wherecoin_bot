@@ -25,7 +25,7 @@ async def send_operation_message(bot: Bot, operation: Operation):
         comment=operation.comment or "",
     )
 
-    if operation.type is None:
+    if operation.type == OperationTypes.Unset:
         reply_markup = await operation_set_type_keyboard(operation.id)
     else:
         reply_markup = await operation_set_category_keyboard(
