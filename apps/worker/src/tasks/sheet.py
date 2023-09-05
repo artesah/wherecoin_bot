@@ -47,7 +47,14 @@ def upload_user_operations(user_id: int):
 @celery.task
 def init_operation_uploading():
     users = list(
-        User.select(User.id).where(User.is_blocked == False, User.sheet.is_null(False))
+        User.select(User.id)
+        .join(Operation)
+        .where(
+            User.is_blocked == False,
+            User.sheet.is_null(False),
+            Operation.status == OperationStatuses.Finalized,
+        )
+        .group_by(User.id)
     )
 
     jobs = (upload_user_operations.si(u.id) for u in users)
