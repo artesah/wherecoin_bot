@@ -3,7 +3,7 @@ from typing import List
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 
-from apps.bot.config import CONTENT_FILENAME
+from apps.bot.config import CONTENT_FILENAME, SHEET_URL_TEMPLATE
 from apps.bot.src.content import load_content
 from libs.constants import OperationTypes
 from libs.models import OperationCategory
@@ -92,3 +92,16 @@ async def operation_set_category_keyboard(
     )
 
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+
+
+async def sheet_url_keyboard(sheet: str):
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=_content["keyboards"]["inline"]["sheet"],
+                    url=SHEET_URL_TEMPLATE.format(sheet=sheet),
+                )
+            ]
+        ]
+    )

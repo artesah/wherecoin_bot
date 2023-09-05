@@ -25,3 +25,7 @@ with env.prefixed("BOT_APP_"):
     BOT_ADMINS = tuple(str(chat_id) for chat_id in env.list("BOT_ADMINS", []))
 
     BLOCK_REGISTRATION = env.bool("BLOCK_REGISTRATION", False)
+
+    SHEET_URL_TEMPLATE = env.str(
+        "SHEET_URL_TEMPLATE", "https://docs.google.com/spreadsheets/d/{sheet}"
+    )
