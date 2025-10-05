@@ -111,7 +111,7 @@ class Operation(BaseModel):
     status = SmallIntegerField(default=OperationStatuses.Created)
     type = SmallIntegerField(default=OperationTypes.Unset)
     source = SmallIntegerField()
-    amount = DoubleField(null=True)
+    amount = DoubleField()
     comment = TextField(null=True)
 
 

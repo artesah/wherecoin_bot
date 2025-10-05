@@ -44,17 +44,17 @@ def download_statement(integration_id: int, sampling_time: int):
 
     rows = []
     for obj in resp:
-        rows.append(_format_obj(obj))
-
-    for i, obj in enumerate(rows):
-        if obj["comment"] in ignored_comments:
+        if obj.get("description") in ignored_comments:
             continue
-
-        rows[i].update(
+            
+        row = _format_obj(obj)
+        row.update(
             dict(user_id=integration.user_id, source=OperationSources.Monobank)
         )
+        rows.append(row)
 
-    Operation.insert_many(rows).execute()
+    if rows:
+        Operation.insert_many(rows).execute()
 
 
 @celery.task
