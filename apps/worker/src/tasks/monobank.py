@@ -21,7 +21,10 @@ def _format_obj(obj):
 
 
 @celery.task
-def download_statement(integration_id: int, sampling_time: int):
+def download_statement(integration_id: int, sampling_time: int, ignored_comments: list = None):
+    if ignored_comments is None:
+        ignored_comments = []
+
     integration = MonobankIntegration.get_by_id(integration_id)
     client = MonobankClient(integration.token)
 
@@ -41,6 +44,10 @@ def download_statement(integration_id: int, sampling_time: int):
         rows.append(_format_obj(obj))
 
     for i, obj in enumerate(rows):
+
+        if obj["comment"] in ignored_comments:
+            continue
+
         rows[i].update(
             dict(user_id=integration.user_id, source=OperationSources.Monobank)
         )
@@ -56,7 +63,12 @@ def init_statements(sampling_time: int):
         .where(User.is_blocked == False)
     )
 
-    jobs = (download_statement.si(i.id, sampling_time) for i in integrations)
+    jobs = (download_statement.si(i.id, sampling_time, 
+    [
+        "future",
+        "ignore",
+        "На білу картку"
+    ]) for i in integrations)
 
     task = celery_lib.group(*jobs)
     task.apply_async()
